@@ -34,15 +34,10 @@ jobs:
             const { repo: { owner, repo }, sha } = context;
             const data = fs.readFileSync("builds/butiko");
 
-            github.rest.repos.createRelease({
+            const release = await github.rest.repos.createRelease({
               owner, repo,
               tag_name: context.ref,
               name: context.ref,
               generate_release_notes: true
             })
-            github.rest.repos.uploadReleaseAsset({
-              owner, repo,
-              release_id: context.ref,
-              name: `butiko_${context.ref}_linux_amd64`,
-              data,
-            });
+            console.log(release)
