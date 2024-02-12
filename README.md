@@ -25,7 +25,49 @@ curl -fsSL https://github.com/SampaioLeal/butiko/install.sh | sh
 ## Usage
 
 ```shell
-butiko build ./manifests/butiko.yaml
+butiko build ./examples/simple/butiko.yaml
+```
+
+The results will be like:
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp
+  namespace: myapp
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      containers:
+        - name: myapp
+          image: "registry.mycompany/myapp:latest"
+          resources:
+            requests:
+              memory: 50Mi
+              cpu: 100m
+            limits:
+              memory: 128Mi
+              cpu: 500m
+          ports:
+            - containerPort: 3000
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: myapp
+  namespace: myapp
+# ..........
+# ..........
+# ..........
 ```
 
 ## Roadmap
