@@ -1,5 +1,8 @@
 {
   "tasks": {
+    "lint": "deno lint ./",
+    "test": "deno test -A ./",
+    "check": "deno check ./src/main.ts",
     "run": "deno run --allow-read ./src/main.ts",
     "build": "deno compile --allow-read --output ./builds/butiko ./src/main.ts"
   },
