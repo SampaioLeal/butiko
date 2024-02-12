@@ -72,6 +72,8 @@ metadata:
 
 ## Roadmap
 
+- Install script
+- GitHub Actions release workflow
 - Support URL imports
 
 <!--
