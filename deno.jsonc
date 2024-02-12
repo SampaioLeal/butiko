@@ -1,0 +1,9 @@
+{
+  "tasks": {
+    "run": "deno run --allow-read ./src/main.ts",
+    "build": "deno compile --allow-read --output ./builds/butiko ./src/main.ts"
+  },
+  "imports": {
+    "deno/": "https://deno.land/std@0.215.0/"
+  }
+}

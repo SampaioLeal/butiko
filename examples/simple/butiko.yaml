@@ -1,0 +1,23 @@
+namespace: myapp
+
+imports:
+  - deployment.yaml
+  - service.yaml
+  - ingress.yaml
+
+variables:
+  - name: APP_ENVIRONMENT
+    value: "staging"
+  - name: APP_IMAGE_NAME
+    value: "registry.mycompany/myapp"
+  - name: APP_IMAGE_TAG
+    value: "latest"
+  - name: APP_RESOURCES
+    value:
+      requests:
+        memory: 50Mi
+        cpu: 100m
+      limits:
+        memory: 128Mi
+        cpu: 500m
+  - path: ./variables.env
