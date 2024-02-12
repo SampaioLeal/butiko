@@ -1,0 +1,47 @@
+name: release
+
+on:
+  push:
+    tags:
+      - "*"
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Setup Deno
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: v1.x
+
+      - name: Build project binary
+        run: deno task build
+
+      - name: Create release
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { repo: { owner, repo }, sha } = context;
+            const data = fs.readFileSync("builds/butiko");
+
+            github.rest.repos.createRelease({
+              owner, repo,
+              tag_name: context.ref,
+              name: context.ref,
+              generate_release_notes: true
+            })
+            github.rest.repos.uploadReleaseAsset({
+              owner, repo,
+              release_id: context.ref,
+              name: `butiko_${context.ref}_linux_amd64`,
+              data,
+            });
