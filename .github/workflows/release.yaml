@@ -88,7 +88,7 @@ jobs:
           script: |
             const fs = require("fs");
             const { repo: { owner, repo }, sha } = context;
-            const data = fs.readFileSync("builds/butiko");
+            const data = fs.readFileSync("butiko");
             const tag = context.ref.replace("refs/tags/", "");
 
             const release = await github.rest.repos.createRelease({
