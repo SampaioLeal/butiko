@@ -6,9 +6,24 @@ on:
       - "*"
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Setup Deno
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: v1.x
+
+      - name: Build project binary
+        run: deno task build
+
   release:
     runs-on: ubuntu-latest
-
     steps:
       - name: Setup repo
         uses: actions/checkout@v4
@@ -31,14 +46,15 @@ jobs:
             const { repo: { owner, repo }, sha } = context;
             const data = fs.readFileSync("builds/butiko");
 
+            console.log(context)
+
             const release = await github.rest.repos.createRelease({
               owner, repo,
               tag_name: context.ref,
               name: context.ref,
               generate_release_notes: true
             })
-            console.log(release)
-            github.rest.repos.uploadReleaseAsset({
+            const asset = await github.rest.repos.uploadReleaseAsset({
               owner, repo,
               release_id: release.data.id,
               name: `butiko_${context.ref}_linux_amd64`,
