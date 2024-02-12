@@ -6,38 +6,82 @@ on:
       - "*"
 
 jobs:
-  build:
+  lint:
     runs-on: ubuntu-latest
     steps:
       - name: Setup repo
         uses: actions/checkout@v4
         with:
           fetch-depth: 1
-
       - name: Setup Deno
         uses: denoland/setup-deno@v1
         with:
           deno-version: v1.x
+      - name: Lint project
+        run: deno task lint
 
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: Setup Deno
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: v1.x
+      - name: Test project
+        run: deno task test
+
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: Setup Deno
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: v1.x
+      - name: Check project
+        run: deno task check
+
+  build:
+    runs-on: ubuntu-latest
+    needs: [lint, test, check]
+    steps:
+      - name: Setup repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: Setup Deno
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: v1.x
       - name: Build project binary
         run: deno task build
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: butiko-binary
+          retention-days: 1
+          path: |
+            builds
 
   release:
     runs-on: ubuntu-latest
+    needs: build
     steps:
       - name: Setup repo
         uses: actions/checkout@v4
         with:
           fetch-depth: 1
-
-      - name: Setup Deno
-        uses: denoland/setup-deno@v1
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
         with:
-          deno-version: v1.x
-
-      - name: Build project binary
-        run: deno task build
-
+          name: butiko-binary
       - name: Create release
         uses: actions/github-script@v7
         with:
@@ -45,18 +89,17 @@ jobs:
             const fs = require("fs");
             const { repo: { owner, repo }, sha } = context;
             const data = fs.readFileSync("builds/butiko");
-
-            console.log(context)
+            const tag = context.ref.replace("refs/tags/", "");
 
             const release = await github.rest.repos.createRelease({
               owner, repo,
               tag_name: context.ref,
-              name: context.ref,
+              name: tag,
               generate_release_notes: true
             })
             const asset = await github.rest.repos.uploadReleaseAsset({
               owner, repo,
               release_id: release.data.id,
-              name: `butiko_${context.ref}_linux_amd64`,
+              name: `butiko_${tag}_linux_amd64`,
               data,
             });
