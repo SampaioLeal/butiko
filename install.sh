@@ -10,7 +10,7 @@ repo="SampaioLeal/butiko"
 os_arch="linux_amd64"
 latest_release=$(curl -sL "https://api.github.com/repos/${repo}/releases/latest" | jq -r '.tag_name')
 asset_url="https://github.com/SampaioLeal/butiko/releases/download/${latest_release}/butiko_${latest_release}_${os_arch}.xz"
-install_path="/usr/local/bin"
+install_path="$HOME/.butiko/bin"
 exe="$install_path/butiko"
 
 if ! command -v xz >/dev/null; then
@@ -18,6 +18,7 @@ if ! command -v xz >/dev/null; then
 	exit 1
 fi
 
+mkdir -p "$install_path"
 curl --fail --location --progress-bar --output "${exe}.xz" "$asset_url"
 
 xz -d "$exe.xz"
@@ -33,7 +34,7 @@ else
 	*) shell_profile=".bashrc" ;;
 	esac
 	log "Manually add the directory to your \$HOME/$shell_profile (or similar)"
-	log "  export PATH=\"/usr/local/bin:\$PATH\""
+	log "  export PATH=\"$install_path:\$PATH\""
 	log "Run '$exe --help' to get started"
 fi
 
