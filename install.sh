@@ -9,7 +9,7 @@ log() {
 repo="SampaioLeal/butiko" 
 os_arch="linux_amd64"
 latest_release=$(curl -sL "https://api.github.com/repos/${repo}/releases/latest" | jq -r '.tag_name')
-asset_url="https://github.com/SampaioLeal/butiko/releases/download/${tag}/butiko_${tag}_${os_arch}.xz"
+asset_url="https://github.com/SampaioLeal/butiko/releases/download/${latest_release}/butiko_${latest_release}_${os_arch}.xz"
 install_path="/usr/local/bin"
 exe="$install_path/butiko"
 
