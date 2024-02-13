@@ -74,6 +74,7 @@ metadata:
 
 - Use [cliffy](https://deno.land/x/cliffy@v1.0.0-rc.3)
 - Support URL imports
+- Support other systems and archs
 
 <!--
 ## FAQ
