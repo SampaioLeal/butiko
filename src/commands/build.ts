@@ -7,7 +7,6 @@ import { ButikoManifest } from "../types.ts";
 import * as dotenv from "deno/dotenv/mod.ts";
 import { VariablesMap } from "../types.ts";
 import { getValue, paths, setValue } from "../object_utils.ts";
-import { Args } from "deno/cli/parse_args.ts";
 import { ButikoError } from "../errors.ts";
 
 async function readManifest<T extends object>(path: string) {
@@ -19,7 +18,7 @@ async function readManifest<T extends object>(path: string) {
   return manifest;
 }
 
-export async function buildResources(path: string) {
+export async function buildResources(_options: void, path: string) {
   const variables: VariablesMap = new Map();
   const resolvedPath = resolve(path);
   const parsedPath = parse(resolvedPath);
@@ -112,10 +111,4 @@ export async function buildResources(path: string) {
   }
 
   return console.log(manifests.join("\n---\n"));
-}
-
-export function parseBuildArgs(args: Args) {
-  if (!args._[1] || typeof args._[1] !== "string") {
-    throw new ButikoError("Invalid path to butiko.yaml file");
-  }
 }
