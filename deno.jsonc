@@ -7,6 +7,7 @@
     "build": "deno compile --allow-read --output ./builds/butiko ./src/main.ts"
   },
   "imports": {
-    "deno/": "https://deno.land/std@0.215.0/"
+    "deno/": "https://deno.land/std@0.215.0/",
+    "cliffy/": "https://deno.land/x/cliffy@v1.0.0-rc.3/"
   }
 }
