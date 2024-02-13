@@ -19,7 +19,7 @@ Build kubernetes resources easily
 ## Installing
 
 ```bash
-curl -fsSL https://github.com/SampaioLeal/butiko/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/SampaioLeal/butiko/main/install.sh | sh
 ```
 
 ## Usage
