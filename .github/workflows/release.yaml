@@ -82,13 +82,15 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: butiko-binary
+      - name: Compress build artifact
+        run: xz butiko
       - name: Create release
         uses: actions/github-script@v7
         with:
           script: |
             const fs = require("fs");
             const { repo: { owner, repo }, sha } = context;
-            const data = fs.readFileSync("butiko");
+            const data = fs.readFileSync("butiko.xz");
             const tag = context.ref.replace("refs/tags/", "");
 
             const release = await github.rest.repos.createRelease({
@@ -100,6 +102,6 @@ jobs:
             const asset = await github.rest.repos.uploadReleaseAsset({
               owner, repo,
               release_id: release.data.id,
-              name: `butiko_${tag}_linux_amd64`,
+              name: `butiko_${tag}_linux_amd64.xz`,
               data,
             });
