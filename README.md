@@ -10,6 +10,8 @@
 
 Build kubernetes resources easily
 
+![Butiko Asciinema](/butiko.gif)
+
 ## Features
 
 - Create multiple environments with the `variables` list
